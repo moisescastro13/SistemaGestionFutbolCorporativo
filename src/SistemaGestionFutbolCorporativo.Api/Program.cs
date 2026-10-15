@@ -22,6 +22,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.MapGet("/health", () => "OK");
+
 app.MapEndpoints();
 
 app.Run();

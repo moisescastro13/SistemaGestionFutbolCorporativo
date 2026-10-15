@@ -1,6 +1,5 @@
 namespace SistemaGestionFutbolCorporativo.Application.Common;
 
-
 public readonly record struct PagedList<T>(
     IReadOnlyList<T> Items, 
     int Page, 

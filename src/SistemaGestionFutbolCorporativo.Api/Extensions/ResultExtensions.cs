@@ -1,5 +1,4 @@
 using SistemaGestionFutbolCorporativo.Domain.Common;
-using Microsoft.AspNetCore.Http;
 
 namespace SistemaGestionFutbolCorporativo.Api.Extensions;
 

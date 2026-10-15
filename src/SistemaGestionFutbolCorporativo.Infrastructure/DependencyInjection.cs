@@ -15,6 +15,9 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("Database");
 
         // EF Core
+
+        services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+
         services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
 
