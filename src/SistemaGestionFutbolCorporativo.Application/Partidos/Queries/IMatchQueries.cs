@@ -11,20 +11,54 @@ public sealed record GoalDetailDto(
     int? Minuto,
     bool EsAutogol);
 
-public sealed record MatchDetailResponse(
-    Guid Id,
-    int Jornada,
-    DateTime FechaHora,
-    string Estado,
-    Guid EquipoLocalId,
-    string EquipoLocalNombre,
-    string? EquipoLocalLogoUrl,
-    Guid EquipoVisitanteId,
-    string EquipoVisitanteNombre,
-    string? EquipoVisitanteLogoUrl,
-    int? GolesLocal,
-    int? GolesVisitante,
-    List<GoalDetailDto> Goles);
+public sealed record MatchDetailResponse
+{
+    public Guid Id { get; init; }
+    public int Jornada { get; init; }
+    public DateTime FechaHora { get; init; }
+    public string Estado { get; init; } = string.Empty;
+    public Guid EquipoLocalId { get; init; }
+    public string EquipoLocalNombre { get; init; } = string.Empty;
+    public string? EquipoLocalLogoUrl { get; init; }
+    public Guid EquipoVisitanteId { get; init; }
+    public string EquipoVisitanteNombre { get; init; } = string.Empty;
+    public string? EquipoVisitanteLogoUrl { get; init; }
+    public int? GolesLocal { get; init; }
+    public int? GolesVisitante { get; init; }
+    public List<GoalDetailDto> Goles { get; init; } = [];
+
+    public MatchDetailResponse() { }
+
+    public MatchDetailResponse(
+        Guid id,
+        int jornada,
+        DateTime fechaHora,
+        string estado,
+        Guid equipoLocalId,
+        string equipoLocalNombre,
+        string? equipoLocalLogoUrl,
+        Guid equipoVisitanteId,
+        string equipoVisitanteNombre,
+        string? equipoVisitanteLogoUrl,
+        int? golesLocal,
+        int? golesVisitante,
+        List<GoalDetailDto>? goles = null)
+    {
+        Id = id;
+        Jornada = jornada;
+        FechaHora = fechaHora;
+        Estado = estado;
+        EquipoLocalId = equipoLocalId;
+        EquipoLocalNombre = equipoLocalNombre;
+        EquipoLocalLogoUrl = equipoLocalLogoUrl;
+        EquipoVisitanteId = equipoVisitanteId;
+        EquipoVisitanteNombre = equipoVisitanteNombre;
+        EquipoVisitanteLogoUrl = equipoVisitanteLogoUrl;
+        GolesLocal = golesLocal;
+        GolesVisitante = golesVisitante;
+        Goles = goles ?? [];
+    }
+}
 
 public sealed record MatchSummaryDto(
     Guid Id,

@@ -9,12 +9,30 @@ public sealed record PlayerDto(
     int Dorsal,
     string Posicion);
 
-public sealed record TeamDetailResponse(
-    Guid Id,
-    string Nombre,
-    string? LogoUrl,
-    DateTime FechaCreacion,
-    List<PlayerDto>? Jugadores);
+public sealed record TeamDetailResponse
+{
+    public Guid Id { get; init; }
+    public string Nombre { get; init; } = string.Empty;
+    public string? LogoUrl { get; init; }
+    public DateTime FechaCreacion { get; init; }
+    public List<PlayerDto> Jugadores { get; init; } = [];
+
+    public TeamDetailResponse() { }
+
+    public TeamDetailResponse(
+        Guid id,
+        string nombre,
+        string? logoUrl,
+        DateTime fechaCreacion,
+        List<PlayerDto>? jugadores = null)
+    {
+        Id = id;
+        Nombre = nombre;
+        LogoUrl = logoUrl;
+        FechaCreacion = fechaCreacion;
+        Jugadores = jugadores ?? [];
+    }
+}
 
 public sealed record GetTeamByIdQuery(Guid Id) : IRequest<Result<TeamDetailResponse>>;
 
