@@ -1,10 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MiSolucion.Infrastructure.Queries;
 using SistemaGestionFutbolCorporativo.Application.Common;
 using SistemaGestionFutbolCorporativo.Application.Equipos.Queries;
+using SistemaGestionFutbolCorporativo.Application.Jugadores.Queries;
+using SistemaGestionFutbolCorporativo.Application.Partidos.Queries;
+using SistemaGestionFutbolCorporativo.Application.Torneo.Queries;
 using SistemaGestionFutbolCorporativo.Infrastructure.Persistence;
+using SistemaGestionFutbolCorporativo.Infrastructure.Queries;
 
 namespace SistemaGestionFutbolCorporativo.Infrastructure;
 
@@ -20,11 +23,19 @@ public static class DependencyInjection
 
         services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
+        services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 
+        services.AddScoped<IIdempotencyStore, IdempotencyStore>();
+
+        services.AddScoped<IDatabaseSeeder, DatabaseSeeder>();
+        services.AddScoped<IDatabaseInitializer, DatabaseInitializer>();
         // Dapper Connection Factory 
         services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
 
-        services.AddScoped<IEquipoQueries, EquipoQueries>();
+        services.AddScoped<ITeamQueries, TeamQueries>();
+        services.AddScoped<IPlayerQueries, PlayerQueries>();
+        services.AddScoped<IMatchQueries, MatchQueries>();
+        services.AddScoped<ITournamentQueries, TournamentQueries>();
 
         return services;
     }

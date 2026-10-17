@@ -1,3 +1,6 @@
+using SistemaGestionFutbolCorporativo.Domain.Common;
+using SistemaGestionFutbolCorporativo.Domain.Events;
+
 namespace SistemaGestionFutbolCorporativo.Domain.Entities;
 
 public enum EstadoPartido
@@ -6,7 +9,7 @@ public enum EstadoPartido
     Finalizado = 1
 }
 
-public class Partido
+public class Partido : Entity
 {
     public Guid Id { get; private set; }
     public Guid EquipoLocalId { get; private set; }
@@ -23,7 +26,7 @@ public class Partido
 
     private Partido() { }
 
-    public static Partido Programar(Guid equipoLocalId, Guid equipoVisitanteId, int jornada, DateTime fechaHora)
+    public static Partido Schedule(Guid equipoLocalId, Guid equipoVisitanteId, int jornada, DateTime fechaHora)
     {
         if (equipoLocalId == equipoVisitanteId)
             throw new InvalidOperationException("Un equipo no puede jugar contra sí mismo.");
@@ -41,13 +44,32 @@ public class Partido
         };
     }
 
-    public void RegistrarResultado(int golesLocal, int golesVisitante)
+    public void RegisterResult(int golesLocal, int golesVisitante, IEnumerable<Gol>? goles = null)
     {
+        if (Estado == EstadoPartido.Finalizado)
+            throw new InvalidOperationException("El partido ya ha sido finalizado previamente.");
+
         if (golesLocal < 0 || golesVisitante < 0)
             throw new ArgumentException("Los goles no pueden ser negativos.");
 
         GolesLocal = golesLocal;
         GolesVisitante = golesVisitante;
         Estado = EstadoPartido.Finalizado;
+
+        if (goles is not null)
+        {
+            foreach (var gol in goles)
+            {
+                Goles.Add(gol);
+            }
+        }
+
+        RaiseDomainEvent(new MatchResultRegisteredDomainEvent(
+            Id,
+            EquipoLocalId,
+            EquipoVisitanteId,
+            golesLocal,
+            golesVisitante,
+            DateTime.UtcNow));
     }
 }

@@ -10,6 +10,12 @@ public static class ResultExtensions
             onFailure: MapErrorToHttpResult
         );
 
+    public static IResult ToNoContentHttpResult(this Result result) =>
+        result.Match(
+            onSuccess: () => Results.NoContent(),
+            onFailure: MapErrorToHttpResult
+        );
+
     public static IResult ToHttpResult<T>(this Result<T> result) =>
         result.Match(
             onSuccess: value => Results.Ok(value),

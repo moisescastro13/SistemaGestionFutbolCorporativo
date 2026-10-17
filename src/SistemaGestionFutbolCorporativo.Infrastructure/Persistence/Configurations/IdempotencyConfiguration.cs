@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SistemaGestionFutbolCorporativo.Application.Common;
 
-namespace MiSolucion.Infrastructure.Persistence.Configurations;
+namespace SistemaGestionFutbolCorporativo.Infrastructure.Persistence.Configurations;
 public class IdempotencyConfiguration : IEntityTypeConfiguration<IdempotencyRecord>
 {
     public void Configure(EntityTypeBuilder<IdempotencyRecord> builder)

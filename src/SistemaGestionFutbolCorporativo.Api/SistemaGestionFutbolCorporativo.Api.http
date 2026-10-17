@@ -1,6 +1,201 @@
-@SistemaGestionFutbolCorporativo.Api_HostAddress = http://localhost:5193
+@Api_HostAddress = http://localhost:5193
+@EquipoId = 11111111-1111-1111-1111-111111111111
+@NuevoEquipoId = 55555555-5555-5555-5555-555555555555
 
-GET {{SistemaGestionFutbolCorporativo.Api_HostAddress}}/weatherforecast/
+### 1. Health Check
+GET {{Api_HostAddress}}/health
 Accept: application/json
 
 ###
+
+### 2. Listar Equipos (Paginación por defecto)
+GET {{Api_HostAddress}}/api/equipos?pageNumber=1&pageSize=10&sortBy=nombre&sortDirection=asc
+Accept: application/json
+
+###
+
+### 3. Listar Equipos con Filtro de Nombre
+GET {{Api_HostAddress}}/api/equipos?nombre=Tech&pageNumber=1&pageSize=5
+Accept: application/json
+
+###
+
+### 4. Obtener Equipo por ID (con detalle de jugadores)
+GET {{Api_HostAddress}}/api/equipos/{{EquipoId}}
+Accept: application/json
+
+###
+
+### 5. Crear Equipo (POST con Idempotencia)
+POST {{Api_HostAddress}}/api/equipos
+Content-Type: application/json
+Idempotency-Key: test-create-equipo-001
+
+{
+  "nombre": "Innovación FC",
+  "logoUrl": "https://cdn.example.com/logos/innovacion.png"
+}
+
+###
+
+### 6. Actualizar Equipo Completo (PUT con Idempotencia)
+PUT {{Api_HostAddress}}/api/equipos/{{NuevoEquipoId}}
+Content-Type: application/json
+Idempotency-Key: test-update-equipo-001
+
+{
+  "nombre": "Innovación Digital FC",
+  "logoUrl": "https://cdn.example.com/logos/innovacion-v2.png"
+}
+
+###
+
+### 7. Actualización Parcial de Equipo (PATCH con Idempotencia)
+PATCH {{Api_HostAddress}}/api/equipos/{{NuevoEquipoId}}
+Content-Type: application/json
+Idempotency-Key: test-patch-equipo-001
+
+{
+  "logoUrl": "https://cdn.example.com/logos/innovacion-v3.png"
+}
+
+###
+
+### 8. Eliminar Equipo (DELETE con Idempotencia)
+DELETE {{Api_HostAddress}}/api/equipos/{{NuevoEquipoId}}
+Idempotency-Key: test-delete-equipo-001
+
+###
+
+@JugadorId = aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+@NuevoJugadorId = bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb
+
+### 9. Listar Jugadores (Paginado y con filtros)
+GET {{Api_HostAddress}}/api/jugadores?pageNumber=1&pageSize=10&sortBy=nombre&sortDirection=asc
+Accept: application/json
+
+###
+
+### 10. Listar Jugadores por Equipo y Posición
+GET {{Api_HostAddress}}/api/jugadores?equipoId={{EquipoId}}&posicion=Delantero&pageNumber=1&pageSize=5
+Accept: application/json
+
+###
+
+### 11. Obtener Jugador por ID
+GET {{Api_HostAddress}}/api/jugadores/{{JugadorId}}
+Accept: application/json
+
+###
+
+### 12. Registrar Jugador en Equipo (POST con Idempotencia)
+POST {{Api_HostAddress}}/api/equipos/{{EquipoId}}/jugadores
+Content-Type: application/json
+Idempotency-Key: test-create-jugador-001
+
+{
+  "nombre": "Carlos Velásquez",
+  "dorsal": 17,
+  "posicion": "Delantero"
+}
+
+###
+
+### 13. Actualizar Jugador Completo (PUT con Idempotencia)
+PUT {{Api_HostAddress}}/api/jugadores/{{NuevoJugadorId}}
+Content-Type: application/json
+Idempotency-Key: test-update-jugador-001
+
+{
+  "nombre": "Carlos A. Velásquez",
+  "dorsal": 17,
+  "posicion": "Mediocampista"
+}
+
+###
+
+### 14. Eliminar Jugador (DELETE con Idempotencia)
+DELETE {{Api_HostAddress}}/api/jugadores/{{NuevoJugadorId}}
+Idempotency-Key: test-delete-jugador-001
+
+###
+
+@PartidoId = 99999999-9999-9999-9999-999999999999
+@EquipoVisitanteId = 22222222-2222-2222-2222-222222222222
+
+### 15. Listar Partidos (Paginado y orden por jornada)
+GET {{Api_HostAddress}}/api/partidos?pageNumber=1&pageSize=10
+Accept: application/json
+
+###
+
+### 16. Listar Partidos Filtrados por Jornada y Estado
+GET {{Api_HostAddress}}/api/partidos?jornada=1&estado=Finalizado&pageNumber=1&pageSize=10
+Accept: application/json
+
+###
+
+### 17. Obtener Partido por ID (incluyendo detalle de goles)
+GET {{Api_HostAddress}}/api/partidos/{{PartidoId}}
+Accept: application/json
+
+###
+
+### 18. Programar Partido (POST con Idempotencia)
+POST {{Api_HostAddress}}/api/partidos
+Content-Type: application/json
+Idempotency-Key: test-create-partido-001
+
+{
+  "equipoLocalId": "{{EquipoId}}",
+  "equipoVisitanteId": "{{EquipoVisitanteId}}",
+  "jornada": 4,
+  "fechaHora": "2026-11-20T19:00:00Z"
+}
+
+###
+
+### 19. Registrar Resultado de Partido (POST con Idempotencia y Evento de Dominio)
+POST {{Api_HostAddress}}/api/partidos/{{PartidoId}}/resultado
+Content-Type: application/json
+Idempotency-Key: test-resultado-partido-001
+
+{
+  "golesLocal": 2,
+  "golesVisitante": 1,
+  "goles": [
+    {
+      "jugadorId": "{{JugadorId}}",
+      "equipoId": "{{EquipoId}}",
+      "minuto": 25,
+      "esAutogol": false
+    },
+    {
+      "jugadorId": "{{JugadorId}}",
+      "equipoId": "{{EquipoId}}",
+      "minuto": 78,
+      "esAutogol": false
+    }
+  ]
+}
+
+###
+
+### 20. Consultar Tabla de Posiciones del Torneo
+GET {{Api_HostAddress}}/api/torneo/posiciones
+Accept: application/json
+
+###
+
+### 21. Consultar Tabla de Goleadores (Todos los goleadores)
+GET {{Api_HostAddress}}/api/torneo/goleadores
+Accept: application/json
+
+###
+
+### 22. Consultar Top 5 Goleadores
+GET {{Api_HostAddress}}/api/torneo/goleadores?top=5
+Accept: application/json
+
+###
+

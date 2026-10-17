@@ -1,18 +1,18 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using SistemaGestionFutbolCorporativo.Application.Common;
 using SistemaGestionFutbolCorporativo.Domain.Common;
 using SistemaGestionFutbolCorporativo.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace SistemaGestionFutbolCorporativo.Application.Equipos.Commands;
 
-public record RegistrarEquipoCommand(string Nombre, string? LogoUrl) : IRequest<Result<Guid>>;
+public record CreateTeamCommand(string Nombre, string? LogoUrl) : IRequest<Result<Guid>>;
 
-public class RegistrarEquipoCommandHandler(
+public class CreateTeamCommandHandler(
     IApplicationDbContext dbContext,
-    IUnitOfWork unitOfWork) : IRequestHandler<RegistrarEquipoCommand, Result<Guid>>
+    IUnitOfWork unitOfWork) : IRequestHandler<CreateTeamCommand, Result<Guid>>
 {
-    public async Task<Result<Guid>> Handle(RegistrarEquipoCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CreateTeamCommand request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(request.Nombre))
         {
@@ -25,7 +25,7 @@ public class RegistrarEquipoCommandHandler(
             return Error.Conflict($"Ya existe un equipo registrado con el nombre '{request.Nombre}'.", "Equipo.Duplicado");
         }
 
-        var equipo = Equipo.Crear(request.Nombre, request.LogoUrl);
+        var equipo = Equipo.Create(request.Nombre, request.LogoUrl);
 
         await dbContext.Equipos.AddAsync(equipo, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);

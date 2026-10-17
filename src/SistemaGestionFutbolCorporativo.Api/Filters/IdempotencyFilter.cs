@@ -70,10 +70,15 @@ public class IdempotencyFilter(IIdempotencyStore store) : IEndpointFilter
     }
 }
 
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
+public sealed class RequireIdempotencyAttribute : Attribute;
+
 public static class IdempotencyExtensions
 {
     public static RouteHandlerBuilder RequireIdempotency(this RouteHandlerBuilder builder)
     {
-        return builder.AddEndpointFilter<IdempotencyFilter>();
+        return builder
+            .AddEndpointFilter<IdempotencyFilter>()
+            .WithMetadata(new RequireIdempotencyAttribute());
     }
 }

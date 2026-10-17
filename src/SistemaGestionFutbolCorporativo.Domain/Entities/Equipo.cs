@@ -1,6 +1,9 @@
+using SistemaGestionFutbolCorporativo.Domain.Common;
+using SistemaGestionFutbolCorporativo.Domain.Events;
+
 namespace SistemaGestionFutbolCorporativo.Domain.Entities;
 
-public class Equipo
+public class Equipo : Entity
 {
     public Guid Id { get; private set; }
     public string Nombre { get; private set; } = string.Empty;
@@ -14,16 +17,41 @@ public class Equipo
 
     private Equipo() { }
 
-    public static Equipo Crear(string nombre, string? logoUrl = null)
+    public static Equipo Create(string nombre, string? logoUrl = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(nombre);
 
-        return new Equipo
+        var equipo = new Equipo
         {
             Id = Guid.NewGuid(),
             Nombre = nombre.Trim(),
             LogoUrl = logoUrl?.Trim(),
             FechaCreacion = DateTime.UtcNow
         };
+
+        equipo.RaiseDomainEvent(new TeamCreatedDomainEvent(
+            equipo.Id,
+            equipo.Nombre,
+            equipo.LogoUrl,
+            equipo.FechaCreacion));
+
+        return equipo;
+    }
+
+    public void Update(string nombre, string? logoUrl)
+    {
+        UpdateName(nombre);
+        UpdateLogo(logoUrl);
+    }
+
+    public void UpdateName(string nombre)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(nombre);
+        Nombre = nombre.Trim();
+    }
+
+    public void UpdateLogo(string? logoUrl)
+    {
+        LogoUrl = string.IsNullOrWhiteSpace(logoUrl) ? null : logoUrl.Trim();
     }
 }

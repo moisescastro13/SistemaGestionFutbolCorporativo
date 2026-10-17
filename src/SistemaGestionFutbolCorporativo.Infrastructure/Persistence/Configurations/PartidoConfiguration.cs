@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SistemaGestionFutbolCorporativo.Domain.Entities;
 
-namespace MiSolucion.Infrastructure.Persistence.Configurations;
+namespace SistemaGestionFutbolCorporativo.Infrastructure.Persistence.Configurations;
 
 public class PartidoConfiguration : IEntityTypeConfiguration<Partido>
 {

@@ -9,14 +9,13 @@ public class Gol
     public int? Minuto { get; private set; }
     public bool EsAutogol { get; private set; }
 
-    // Propiedades de navegación
     public Partido Partido { get; private set; } = null!;
     public Jugador Jugador { get; private set; } = null!;
     public Equipo Equipo { get; private set; } = null!;
 
     private Gol() { }
 
-    public static Gol Registrar(Guid partidoId, Guid jugadorId, Guid equipoId, int? minuto, bool esAutogol = false)
+    public static Gol Register(Guid partidoId, Guid jugadorId, Guid equipoId, int? minuto, bool esAutogol = false)
     {
         if (minuto is < 1 or > 130)
             throw new ArgumentOutOfRangeException(nameof(minuto), "El minuto debe ser válido.");

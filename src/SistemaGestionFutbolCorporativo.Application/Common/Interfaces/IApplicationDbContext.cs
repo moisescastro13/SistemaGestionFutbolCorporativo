@@ -3,7 +3,7 @@ using SistemaGestionFutbolCorporativo.Domain.Entities;
 
 namespace SistemaGestionFutbolCorporativo.Application.Common;
 
-public interface IApplicationDbContext : IUnitOfWork
+public interface IApplicationDbContext
 {
     DbSet<Equipo> Equipos { get; }
     DbSet<Jugador> Jugadores { get; }
