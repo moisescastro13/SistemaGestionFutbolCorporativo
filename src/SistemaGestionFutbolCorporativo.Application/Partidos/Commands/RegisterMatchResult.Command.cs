@@ -99,6 +99,11 @@ public sealed class RegisterMatchResultCommandHandler(
 
         partido.RegisterResult(request.GolesLocal, request.GolesVisitante, golesEntidades);
 
+        if (golesEntidades is not null && golesEntidades.Count > 0)
+        {
+            await dbContext.Goles.AddRangeAsync(golesEntidades, cancellationToken);
+        }
+
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Result.Success();

@@ -175,6 +175,12 @@ Idempotency-Key: test-resultado-partido-001
       "equipoId": "{{EquipoId}}",
       "minuto": 78,
       "esAutogol": false
+    },
+    {
+      "jugadorId": "00000000-0000-0000-0000-000000000002",
+      "equipoId": "{{EquipoVisitanteId}}",
+      "minuto": 85,
+      "esAutogol": false
     }
   ]
 }
