@@ -5,13 +5,13 @@ public sealed record TournamentStandingDto(
     Guid EquipoId,
     string EquipoNombre,
     string? LogoUrl,
-    int PJ,
-    int PG,
-    int PE,
-    int PP,
-    int GF,
-    int GC,
-    int DG,
+    int PartidosJugados,
+    int PartidosGanados,
+    int PartidosEmpatados,
+    int PartidosPerdidos,
+    int GolesAFavor,
+    int GolesEnContra,
+    int DiferenciaGoles,
     int Puntos);
 
 public sealed record TopScorerDto(

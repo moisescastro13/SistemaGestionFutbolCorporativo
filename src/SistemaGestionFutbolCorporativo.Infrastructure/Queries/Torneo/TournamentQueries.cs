@@ -47,13 +47,13 @@ public sealed class TournamentQueries(ISqlConnectionFactory connectionFactory) :
                 e.id AS EquipoId,
                 e.nombre AS EquipoNombre,
                 e.logo_url AS LogoUrl,
-                COALESCE(SUM(s.pj), 0)::int AS PJ,
-                COALESCE(SUM(s.pg), 0)::int AS PG,
-                COALESCE(SUM(s.pe), 0)::int AS PE,
-                COALESCE(SUM(s.pp), 0)::int AS PP,
-                COALESCE(SUM(s.gf), 0)::int AS GF,
-                COALESCE(SUM(s.gc), 0)::int AS GC,
-                (COALESCE(SUM(s.gf), 0) - COALESCE(SUM(s.gc), 0))::int AS DG,
+                COALESCE(SUM(s.pj), 0)::int AS PartidosJugados,
+                COALESCE(SUM(s.pg), 0)::int AS PartidosGanados,
+                COALESCE(SUM(s.pe), 0)::int AS PartidosEmpatados,
+                COALESCE(SUM(s.pp), 0)::int AS PartidosPerdidos,
+                COALESCE(SUM(s.gf), 0)::int AS GolesAFavor,
+                COALESCE(SUM(s.gc), 0)::int AS GolesEnContra,
+                (COALESCE(SUM(s.gf), 0) - COALESCE(SUM(s.gc), 0))::int AS DiferenciaGoles,
                 ((COALESCE(SUM(s.pg), 0) * 3) + (COALESCE(SUM(s.pe), 0) * 1))::int AS Puntos
             FROM equipos e
             LEFT JOIN stats_partidos s ON s.equipo_id = e.id
