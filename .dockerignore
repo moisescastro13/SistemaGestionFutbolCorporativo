@@ -1,0 +1,23 @@
+# Directorios de control de versiones y entornos de desarrollo
+**/.git
+**/.github
+**/.vs
+**/.vscode
+**/.idea
+**/*.user
+**/*.suo
+.DS_Store
+Thumbs.db
+
+# Artefactos de compilación de .NET
+**/bin/
+**/obj/
+
+# Artefactos y dependencias de frontend
+**/node_modules/
+**/dist/
+frontend/dist/
+frontend/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

@@ -1,0 +1,58 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: futbol_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-789520}
+      POSTGRES_DB: ${POSTGRES_DB:-SistemaGestionFutbolCorporativo}
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-admin} -d ${POSTGRES_DB:-SistemaGestionFutbolCorporativo}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - futbol_network
+
+  backend:
+    container_name: futbol_backend
+    build:
+      context: .
+      dockerfile: src/SistemaGestionFutbolCorporativo.Api/Dockerfile
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__Database=Host=db;Port=5432;Username=${POSTGRES_USER:-admin};Password=${POSTGRES_PASSWORD:-789520};Database=${POSTGRES_DB:-SistemaGestionFutbolCorporativo}
+    ports:
+      - "${BACKEND_PORT:-5193}:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - futbol_network
+
+  frontend:
+    container_name: futbol_frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    depends_on:
+      - backend
+    networks:
+      - futbol_network
+
+networks:
+  futbol_network:
+    driver: bridge
+
+volumes:
+  postgres_data:

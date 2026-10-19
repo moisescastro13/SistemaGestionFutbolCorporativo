@@ -24,7 +24,6 @@ public sealed class DatabaseInitializer(
         catch (Exception ex)
         {
             logger.LogError(ex, "Error durante la inicialización o sembrado de la base de datos.");
-            //throw;
         }
     }
 }
@@ -37,10 +36,10 @@ public sealed class DatabaseSeeder(ApplicationDbContext context) : IDatabaseSeed
             return;
         }
 
-        var alianza = Equipo.Create("Alianza FC", "https://img.freepik.com/vector-premium/alianza.png");
-        var fas = Equipo.Create("CD FAS", "https://img.freepik.com/vector-premium/fas.png");
-        var aguila = Equipo.Create("CD Águila", "https://img.freepik.com/vector-premium/aguila.png");
-        var firpo = Equipo.Create("CD Luis Ángel Firpo", "https://img.freepik.com/vector-premium/firpo.png");
+        var alianza = Equipo.Create("Alianza FC", "https://upload.wikimedia.org/wikipedia/commons/2/2f/Alianza_FC_%28El_Salvador%29_logo.png?utm_source=es.wikipedia.org&utm_campaign=index&utm_content=thumbnail");
+        var fas = Equipo.Create("CD FAS", "https://thumb.wikimedia.org/wikipedia/en/thumb/d/db/CD_FAS.svg/1280px-CD_FAS.svg.png?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=thumbnail");
+        var aguila = Equipo.Create("CD Águila", "https://i.pinimg.com/736x/01/a9/ba/01a9baac67d61af8ae1800b4f34d851b.jpg");
+        var firpo = Equipo.Create("CD Luis Ángel Firpo", "https://thumb.wikimedia.org/wikipedia/en/thumb/6/69/CD_Luis_Ángel_Firpo_logo.png/250px-CD_Luis_Ángel_Firpo_logo.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail");
 
         await context.Equipos.AddRangeAsync([alianza, fas, aguila, firpo], cancellationToken);
 
@@ -89,11 +88,11 @@ public sealed class DatabaseSeeder(ApplicationDbContext context) : IDatabaseSeed
 
         // Jornada 2
         var p3 = Partido.Schedule(alianza.Id, aguila.Id, 2, DateTime.UtcNow.AddDays(-3));
-        var p4 = Partido.Schedule(fas.Id, firpo.Id, 2, DateTime.UtcNow.AddDays(2)); // Pendiente
+        var p4 = Partido.Schedule(fas.Id, firpo.Id, 2, DateTime.UtcNow.AddDays(2)); 
 
         // Jornada 3
-        var p5 = Partido.Schedule(firpo.Id, alianza.Id, 3, DateTime.UtcNow.AddDays(5)); // Pendiente
-        var p6 = Partido.Schedule(fas.Id, aguila.Id, 3, DateTime.UtcNow.AddDays(6));   // Pendiente
+        var p5 = Partido.Schedule(firpo.Id, alianza.Id, 3, DateTime.UtcNow.AddDays(5)); 
+        var p6 = Partido.Schedule(fas.Id, aguila.Id, 3, DateTime.UtcNow.AddDays(6)); 
 
         p1.RegisterResult(2, 1);
         var golesP1 = new List<Gol>

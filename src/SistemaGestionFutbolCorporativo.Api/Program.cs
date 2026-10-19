@@ -47,11 +47,23 @@ builder.Services.AddMediatR(cfg =>
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .WithExposedHeaders("Idempotency-Key", "X-Correlation-Id");
+    });
+});
+
 builder.Services.AddEndpoints(typeof(Program).Assembly);
 
 var app = builder.Build();
 
 app.UseExceptionHandler();
+app.UseCors();
 app.UseCorrelationId();
 
 await app.InitializeDatabaseAsync();
