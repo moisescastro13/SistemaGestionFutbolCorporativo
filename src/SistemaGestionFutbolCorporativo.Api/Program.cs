@@ -1,6 +1,8 @@
 
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using SistemaGestionFutbolCorporativo.Api.Common;
+using SistemaGestionFutbolCorporativo.Api.Endpoints.Partidos;
 using SistemaGestionFutbolCorporativo.Api.Extensions;
 using SistemaGestionFutbolCorporativo.Api.Filters;
 using SistemaGestionFutbolCorporativo.Api.Middlewares;
@@ -34,6 +36,34 @@ builder.Services.AddOpenApi("v1", options =>
                 Description = "Clave única para garantizar la idempotencia de la operación",
                 Schema = new OpenApiSchema { Type = "string" }
             });
+        }
+        return Task.CompletedTask;
+    });
+
+    options.AddSchemaTransformer((schema, context, cancellationToken) =>
+    {
+        if (context.JsonTypeInfo.Type == typeof(RegisterMatchResultRequest))
+        {
+            if (schema.Properties.TryGetValue("goles", out var golesProp))
+            {
+                golesProp.Default = null;
+            }
+
+            schema.Example = new OpenApiObject
+            {
+                ["golesLocal"] = new OpenApiInteger(2),
+                ["golesVisitante"] = new OpenApiInteger(1),
+                ["goles"] = new OpenApiArray
+                {
+                    new OpenApiObject
+                    {
+                        ["jugadorId"] = new OpenApiString("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                        ["equipoId"] = new OpenApiString("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                        ["minuto"] = new OpenApiInteger(25),
+                        ["esAutogol"] = new OpenApiBoolean(false)
+                    }
+                }
+            };
         }
         return Task.CompletedTask;
     });

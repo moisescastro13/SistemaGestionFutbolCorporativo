@@ -1,0 +1,164 @@
+<mxfile host="app.diagrams.net" agent="Antigravity">
+  <diagram id="arquitectura-sistema" name="Arquitectura Sistema">
+    <mxGraphModel dx="1712" dy="987" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="docker_env" parent="1" style="swimlane;startSize=32;rounded=1;arcSize=6;fillColor=#F8FAFC;strokeColor=#64748B;strokeWidth=2;fontStyle=1;fontSize=14;fontColor=#0F172A;align=left;spacingLeft=15;html=1;" value="Entorno Docker" vertex="1">
+          <mxGeometry height="920" width="1240" x="40" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="cnt_backend" parent="docker_env" style="swimlane;startSize=28;rounded=1;arcSize=8;fillColor=#F8FAFC;strokeColor=#334155;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#0F172A;align=left;spacingLeft=10;html=1;" value="Contenedor Backend (.NET API)" vertex="1">
+          <mxGeometry height="840" width="590" x="280" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_api_qry" edge="1" parent="cnt_backend" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#0284C7;entryX=0.5;entryY=0;" target="node_queries">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="320" y="170" />
+              <mxPoint x="430" y="170" />
+            </Array>
+            <mxPoint x="320" y="150" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_api_cmd" edge="1" parent="cnt_backend" source="node_api" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#16A34A;exitX=0.3;exitY=1;entryX=0.5;entryY=0;" target="node_commands">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="260" y="170" />
+              <mxPoint x="150" y="170" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_cmd_uow" edge="1" parent="cnt_backend" source="node_commands" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#CA8A04;exitX=0.3;exitY=1;entryX=0.5;entryY=0;" target="node_uow">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="75" y="430" />
+              <mxPoint x="75" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_idemp_store" edge="1" parent="cnt_backend" source="node_idemp_filter" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#DC2626;dashed=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="node_idemp_store">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_qry_dapper" edge="1" parent="cnt_backend" source="node_queries" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#0284C7;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=openThin;endFill=0;" target="node_dapper">
+          <mxGeometry relative="1" x="0.0028" as="geometry">
+            <Array as="points">
+              <mxPoint x="430" y="280" />
+              <mxPoint x="450" y="280" />
+              <mxPoint x="450" y="457.5" />
+              <mxPoint x="485" y="457.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="layer_api" parent="cnt_backend" style="swimlane;startSize=24;rounded=1;arcSize=6;fillColor=#F1F5F9;strokeColor=#94A3B8;strokeWidth=1;fontStyle=1;fontSize=11;fontColor=#334155;align=left;spacingLeft=8;html=1;" value="Capa de Presentación / API" vertex="1">
+          <mxGeometry height="115" width="540" x="20" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="node_logs" parent="layer_api" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;fontColor=#78350F;fontSize=10;shadow=1;" value="&lt;b&gt;Logs &amp; CorrelationId&lt;/b&gt;&lt;br&gt;(Middleware)" vertex="1">
+          <mxGeometry height="55" width="150" x="15" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_api" parent="layer_api" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0E7FF;strokeColor=#4F46E5;fontColor=#312E81;fontSize=10;shadow=1;" value="&lt;b&gt;Endpoints API&lt;/b&gt;&lt;br&gt;(Minimal APIs / REST)" vertex="1">
+          <mxGeometry height="55" width="150" x="195" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_idemp_filter" parent="layer_api" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#DC2626;fontColor=#7F1D1D;fontSize=10;shadow=1;" value="&lt;b&gt;Filtro Idempotencia&lt;/b&gt;&lt;br&gt;(RequireIdempotency)" vertex="1">
+          <mxGeometry height="55" width="150" x="375" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="layer_app" parent="cnt_backend" style="swimlane;startSize=24;rounded=1;arcSize=6;fillColor=#F1F5F9;strokeColor=#94A3B8;strokeWidth=1;fontStyle=1;fontSize=11;fontColor=#334155;align=left;spacingLeft=8;html=1;" value="Capa de Aplicación (CQRS)" vertex="1">
+          <mxGeometry height="125" width="540" x="20" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="node_commands" parent="layer_app" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontColor=#14532D;fontSize=11;shadow=1;" value="&lt;b&gt;Commands (Escritura)&lt;/b&gt;&lt;br&gt;MediatR Handlers" vertex="1">
+          <mxGeometry height="60" width="220" x="20" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="node_queries" parent="layer_app" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#0284C7;fontColor=#0C4A6E;fontSize=11;shadow=1;" value="&lt;b&gt;Queries (Lectura)&lt;/b&gt;&lt;br&gt;MediatR Handlers" vertex="1">
+          <mxGeometry height="60" width="220" x="300" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="layer_domain" parent="cnt_backend" style="swimlane;startSize=24;rounded=1;arcSize=6;fillColor=#F1F5F9;strokeColor=#94A3B8;strokeWidth=1;fontStyle=1;fontSize=11;fontColor=#334155;align=left;spacingLeft=8;html=1;" value="Capa de Dominio" vertex="1">
+          <mxGeometry height="115" width="540" x="20" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="node_events" parent="layer_domain" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE7F3;strokeColor=#DB2777;fontColor=#831843;fontSize=10;shadow=1;" value="&lt;b&gt;Eventos de Dominio&lt;/b&gt;&lt;br&gt;IDomainEvent" vertex="1">
+          <mxGeometry height="55" width="220" x="300" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_entities" parent="layer_domain" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontColor=#4C1D95;fontSize=10;shadow=1;" value="&lt;b&gt;Entidades de Negocio&lt;/b&gt;&lt;br&gt;Equipo, Jugador, Partido, Gol" vertex="1">
+          <mxGeometry height="55" width="220" x="20" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_logs_api" edge="1" parent="cnt_backend" source="node_logs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#4F46E5;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="node_api">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_api_idemp" edge="1" parent="cnt_backend" source="node_api" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#DC2626;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="node_idemp_filter">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_cmd_ent" edge="1" parent="cnt_backend" source="node_commands" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#7C3AED;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="node_entities">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_ent_events" edge="1" parent="cnt_backend" source="node_entities" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#DB2777;fontSize=10;fontColor=#831843;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="node_events" value="Genera">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_uow_ef" edge="1" parent="cnt_backend" source="node_uow" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#16A34A;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="node_efcore">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_uow_disp" edge="1" parent="cnt_backend" source="node_uow" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#DB2777;fontSize=10;fontColor=#831843;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="node_dispatcher" value="Al confirmar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_ev_disp" edge="1" parent="cnt_backend" source="node_events" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#DB2777;dashed=1;exitX=0.5;exitY=1;entryX=0.8;entryY=0;" target="node_dispatcher">
+          <mxGeometry relative="1" x="0.0048" as="geometry">
+            <Array as="points">
+              <mxPoint x="430" y="430" />
+              <mxPoint x="400" y="430" />
+              <mxPoint x="400" y="500" />
+              <mxPoint x="358" y="500" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="layer_infra" parent="cnt_backend" style="swimlane;startSize=24;rounded=1;arcSize=6;fillColor=#F1F5F9;strokeColor=#94A3B8;strokeWidth=1;fontStyle=1;fontSize=11;fontColor=#334155;align=left;spacingLeft=8;html=1;" value="Capa de Infraestructura" vertex="1">
+          <mxGeometry height="375" width="540" x="20" y="455" as="geometry" />
+        </mxCell>
+        <mxCell id="node_uow" parent="layer_infra" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF08A;strokeColor=#CA8A04;fontColor=#713F12;fontSize=10;shadow=1;" value="&lt;b&gt;Unit of Work&lt;/b&gt;&lt;br&gt;(Transaccional)" vertex="1">
+          <mxGeometry height="50" width="140" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="node_efcore" parent="layer_infra" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBF7D0;strokeColor=#16A34A;fontColor=#14532D;fontSize=10;shadow=1;" value="&lt;b&gt;EF Core (Write)&lt;/b&gt;&lt;br&gt;ApplicationDbContext" vertex="1">
+          <mxGeometry height="50" width="140" x="30" y="225" as="geometry" />
+        </mxCell>
+        <mxCell id="node_dispatcher" parent="layer_infra" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FBCFE8;strokeColor=#DB2777;fontColor=#831843;fontSize=10;shadow=1;" value="&lt;b&gt;Dispatcher Eventos&lt;/b&gt;&lt;br&gt;DomainEventDispatcher" vertex="1">
+          <mxGeometry height="50" width="160" x="210" y="95" as="geometry" />
+        </mxCell>
+        <mxCell id="node_idemp_store" parent="layer_infra" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FECACA;strokeColor=#DC2626;fontColor=#7F1D1D;fontSize=10;shadow=1;" value="&lt;b&gt;Idempotency Storage&lt;/b&gt;&lt;br&gt;IdempotencyStore" vertex="1">
+          <mxGeometry height="50" width="160" x="185" y="305" as="geometry" />
+        </mxCell>
+        <mxCell id="node_dapper" parent="layer_infra" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BAE6FD;strokeColor=#0284C7;fontColor=#0C4A6E;fontSize=10;shadow=1;" value="&lt;b&gt;Dapper (Read)&lt;/b&gt;&lt;br&gt;TeamQueries / SQL Nativo" vertex="1">
+          <mxGeometry height="125" width="150" x="390" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="cnt_frontend" parent="docker_env" style="swimlane;startSize=28;rounded=1;arcSize=8;fillColor=#EFF6FF;strokeColor=#3B82F6;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#1E3A8A;align=left;spacingLeft=10;html=1;" value="Contenedor Frontend" vertex="1">
+          <mxGeometry height="190" width="220" x="40" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="node_frontend" parent="cnt_frontend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#1E40AF;fontSize=11;shadow=1;" value="&lt;b&gt;Frontend SPA&lt;/b&gt;&lt;br&gt;(React + Vite + TypeScript)" vertex="1">
+          <mxGeometry height="90" width="180" x="20" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="cnt_db" parent="docker_env" style="swimlane;startSize=28;rounded=1;arcSize=8;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#065F46;align=left;spacingLeft=10;html=1;" value="Contenedor Base de Datos (PostgreSQL)" vertex="1">
+          <mxGeometry height="840" width="270" x="950" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_ef_db" edge="1" parent="cnt_db" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#059669;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-55" y="702.5" />
+              <mxPoint x="-55" y="180" />
+            </Array>
+            <mxPoint x="-485" y="702.5000000000002" as="sourcePoint" />
+            <mxPoint x="35" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="node_db_data" parent="cnt_db" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#A7F3D0;strokeColor=#059669;fontColor=#064E3B;fontSize=11;fontStyle=1;shadow=1;" value="&lt;b&gt;Tablas de Negocio&lt;/b&gt;&lt;br&gt;(Equipos, Jugadores,&lt;br&gt;Partidos, Goles)" vertex="1">
+          <mxGeometry height="110" width="190" x="35" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="node_db_idemp" parent="cnt_db" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#FED7AA;strokeColor=#EA580C;fontColor=#7C2D12;fontSize=11;fontStyle=1;shadow=1;" value="&lt;b&gt;Tabla de Idempotencia&lt;/b&gt;&lt;br&gt;(Claves, Rutas,&lt;br&gt;Respuestas previas)" vertex="1">
+          <mxGeometry height="110" width="190" x="40" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_fe_logs" edge="1" parent="docker_env" source="node_frontend" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#2563EB;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="node_logs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_dapper_db" edge="1" parent="docker_env" source="node_dapper" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#0284C7;exitX=1;exitY=0.5;entryX=0;entryY=0.8;" target="node_db_data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="B1QwrocrgrIywtKy3YQr-6" edge="1" parent="docker_env" source="node_idemp_store" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;defaultLabelBackgroundColor=gap;" target="node_db_idemp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
